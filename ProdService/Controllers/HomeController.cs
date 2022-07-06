@@ -54,33 +54,6 @@ namespace ProdService.Controllers
             return Json(await db.Processings.ToListAsync());
         }
 
-        //[HttpGet]
-        //public IActionResult GetMenus(DateTime? date1, DateTime? date2)
-        //{
-        //    ViewBag.Products = db.Products.ToList();
-        //    if (date1 != null && date2 != null)
-        //    {
-        //        ViewData["date1"] = date1;
-        //        ViewData["date2"] = date2;
-        //    }
-        //    else
-        //    {
-        //        ViewData["date1"] = new DateTime(2022, 3, 26);
-        //        ViewData["date2"] = DateTime.Now;
-        //    }
-        //    IEnumerable<MenuItem> menu = db.MenuItems
-        //        .Where(d => d.Date >= date1 && d.Date <= date2)
-        //        .Include(p => p.DishCartMenuItemJunctions)
-        //            .ThenInclude(m => m.Meal)
-        //        .Include(p => p.DishCartMenuItemJunctions)
-        //            .ThenInclude(p => p.DishCart)
-        //                .ThenInclude(p => p.ProductDishCarts)
-        //        .OrderBy(p => p.Date)
-        //        .ToList();
-        //    Console.WriteLine(date1?.ToShortDateString());
-        //    return View("Menu", menu);
-        //}
-
         [HttpGet]
         public async Task<JsonResult> GetDishCart(long id)
         {
@@ -120,11 +93,6 @@ namespace ProdService.Controllers
             return Json(obj);
         }
 
-
-        public IActionResult FillDbNewItems()
-        {
-            return View();
-        }
 
         [HttpGet]
         public async Task<JsonResult> GetMenus(DateTime? date1, DateTime? date2)
@@ -173,52 +141,7 @@ namespace ProdService.Controllers
             return Json(listOfDict);
         }
 
-        //[HttpGet]
-        //public async Task<JsonResult> GetMenus(DateTime? date1, DateTime? date2)
-        //{
-        //    List<MenuItem> menu = await db.MenuItems
-        //        .Where(d => d.Date >= date1 && d.Date <= date2)
-        //        .Include(p => p.DishCartMenuItemJunctions)
-        //            .ThenInclude(m => m.Meal)
-        //        .Include(p => p.DishCartMenuItemJunctions)
-        //            .ThenInclude(p => p.DishCart)
-        //                .ThenInclude(p => p.ProductDishCarts)
-        //        .OrderBy(p => p.Date)
-        //        .ToListAsync();
-
-        //    List<MenuHelperClass> listOfDict = new List<MenuHelperClass>();
-
-        //    foreach (var m in menu)
-        //    {
-        //        MenuHelperClass menuHelper = new MenuHelperClass();
-        //        Dictionary<long, double> dictCountProdPerDay = new Dictionary<long, double>();
-        //        Dictionary<string, IList<Dictionary<string, Dictionary<long, double>>>> d = new Dictionary<string, IList<Dictionary<string, Dictionary<long, double>>>>();
-        //        menuHelper.MenuItemDate = m.Date;
-        //        menuHelper.MenuItemId = m.Id;
-        //        foreach (var mn in m.DishCartMenuItemJunctions)
-        //        {
-        //            List<Dictionary<string, Dictionary<long, double>>> list = new List<Dictionary<string, Dictionary<long, double>>>();
-        //            foreach (var l in m.DishCartMenuItemJunctions.Where(p => p.MealId == mn.MealId && p.MenuItemId == m.Id))
-        //            {
-        //                list.Add(new Dictionary<string, Dictionary<long, double>>
-        //                {
-        //                    [l.DishCart.Name] = mn.DishCart.GetBruttoProductInDish(l.DishCartId)
-        //                });
-        //            }
-        //            d[mn.Meal.Name] = list;
-        //            menuHelper.MealsDishProdWeight = d;
-        //            foreach (var a in mn.DishCart.GetBruttoCountPerProductOnADay(m.Id))
-        //            {
-        //                dictCountProdPerDay[a.Key] = a.Value;
-        //            }
-        //        }
-
-        //        menuHelper.ProductsPerDayCount = dictCountProdPerDay;
-        //        listOfDict.Add(menuHelper);
-        //    };
-
-        //    return Json(listOfDict);
-        //}
+       
 
 
 
