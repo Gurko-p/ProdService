@@ -1,0 +1,724 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+<div class="button-container">
+    <div class="button-box">
+        <button type="button" class="btn btn-primary add-new-value" name="meals" data-bs-toggle="modal" data-bs-target="#addmeals">
+            Добавить прием пищи
+        </button>
+        <button class="btn btn-primary list-button" id="meals" name="Приемы пищи">
+            Список приемов пищи
+        </button>
+    </div>
+    <div class="button-box">
+        <button type="button" class="btn btn-primary add-new-value" name="productGroups" data-bs-toggle="modal" data-bs-target="#addproductGroups">
+            Добавить группу продуктов
+        </button>
+        <button class="btn btn-primary list-button" id="productGroups" name="Группы продуктов">
+            Список групп продуктов
+        </button>
+    </div>
+    <div class="button-box">
+        <button type="button" class="btn btn-primary add-new-value" name="processings" data-bs-toggle="modal" data-bs-target="#addprocessings">
+            Добавить вид обработки
+        </button>
+        <button class="btn btn-primary list-button" id="processings" name="Способы обработки">
+            Список видов обработки
+        </button>
+    </div>
+    <div class="button-box">
+        <button type="button" class="btn btn-primary add-new-value" name="products" data-bs-toggle="modal" data-bs-target="#addproducts">
+            Добавить продукт
+        </button>
+        <button class="btn btn-primary list-button" id="products" name="Продукты">
+            Список продуктов
+        </button>
+    </div>
+    <div class="button-box">
+        <button type="button" class="btn btn-primary add-new-value" name="dishCarts" data-bs-toggle="modal" data-bs-target="#adddishCarts">
+            Сформировать блюдо
+        </button>
+        <button class="btn btn-primary list-button" id="dishCarts" name="Список блюд">
+            Список блюд
+        </button>
+    </div>
+    <div class="button-box">
+        <button type="button" class="btn btn-primary add-new-value" name="menuItems" data-bs-toggle="modal" data-bs-target="#addmenuItems">
+            Сформировать меню
+        </button>
+        <button type="button" class="btn btn-primary" id="clearBtn">
+            Очистить
+        </button>
+    </div>
+    <div class="dateContainer">
+        <div id="MenuDates">
+            <div>Выберите даты:</div>
+            <input type="date" name="date1" value="" class="form-control" />
+            <input type="date" name="date2" value="" class="form-control" />
+            <button type="button" class="btn btn-primary" name="showMenuBtn" id="showMenuBtn" data-bs-toggle="modal" data-bs-target="#showMenu">
+                Показать меню
+            </button>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="listValues">
+    <div class="container-for-list"></div>
+</div>
+
+<div>
+    @Html.Partial("addMealPartial")
+
+    @Html.Partial("addProductGroupPartial")
+
+    @Html.Partial("addProcessingPartial")
+
+    @Html.Partial("addProductPartial")
+
+    @Html.Partial("formDishPartial")
+
+    @Html.Partial("formMenuPartial")
+
+    @Html.Partial("getDishPartial")
+
+    @Html.Partial("showMenuPartial")
+</div>
+
+
+<script type="text/javascript">
+
+    let dataRelated = {
+        "meals": "",
+        "productGroups": "",
+        "processings": "",
+        "products": "productGroups",
+        "dishCarts": "",
+        "menuItems": "",
+    }
+
+
+    async function getList(e, idValue, itemName) {
+        if (idValue == "dishCarts")
+            {
+                clearFormDishCart(`#add${idValue}form`);
+            }
+        if (!(idValue && itemName)) {
+            idValue = e.target.getAttribute("id"); // значение атрибута id=""
+            itemName = e.target.getAttribute("name"); // значение атрибута name=""
+        }
+        let url = `/api/${idValue}`;
+        let response = await fetch(
+            url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(r => r.json());
+        if (checkChildNodes(".container-for-list")) {
+            clearList();
+        }
+        fillList(response, idValue, itemName);
+    }
+
+    async function getDishCart(e, id) {
+        let modalId = e.target.getAttribute("data-bs-target");
+        let form = document.querySelector(`${modalId}form`);
+        let modelsBtnContainer = document.querySelector(`${modalId}form .modal-btns-container`);
+        let dishAddInputs = document.querySelectorAll(`${modalId}form .dishAddContainer > input`);
+        let usefulPropInputs = document.querySelectorAll(`${modalId}form #usefulPropContainer .usefulProp`);
+        let dishContainsProd = document.querySelector(`${modalId}form #dishContainsProd`);
+        if (checkChildNodes(`${modalId}form #dishContainsProd`)) {
+            let dishChild = document.querySelectorAll("#dishContainsProd > div");
+            for (let i = 0; i < dishChild.length; i++) {
+                dishContainsProd.removeChild(dishChild[i]);
+            }
+        }
+        let url = `/home/GetDishCart/${id}`;
+        let response = await fetch(
+                url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+        }).then(r => r.json());
+
+        dishAddInputs[0].value = response["dishCartId"];
+        dishAddInputs[1].value = response["dishCartName"];
+
+        for (let pn in response["productNettoInDishes"]) {
+            let productNettoInDishesItemContainer = document.createElement("div");
+
+            let divForProducts = document.createElement("div");
+            divForProducts.setAttribute("class", "productNettoInDishesProductName");
+
+            let divForProcessings = document.createElement("div");
+            divForProcessings.setAttribute("class", "productNettoInDishesProcessingName");
+
+            let divForWeightBrutto = document.createElement("div");
+            divForWeightBrutto.setAttribute("class", "productNettoInDishesWeightBrutto");
+
+            let divForWeightNetto = document.createElement("div");
+            divForWeightNetto.setAttribute("class", "productNettoInDishesWeightNetto");
+
+
+            let inputProductName = document.createElement("input");
+            inputProductName.setAttribute("class", "form-control");
+            inputProductName.setAttribute("readonly", "readonly");
+            inputProductName.setAttribute("value", `${response["productNettoInDishes"][`${pn}`].productName}`);
+
+            let inputProcessingName = document.createElement("input");
+            inputProcessingName.setAttribute("class", "form-control");
+            inputProcessingName.setAttribute("readonly", "readonly");
+            inputProcessingName.setAttribute("value", `${response["productNettoInDishes"][`${pn}`].processingName}`);
+
+            let inputWeightBrutto = document.createElement("input");
+            inputWeightBrutto.setAttribute("class", "form-control");
+            inputWeightBrutto.setAttribute("readonly", "readonly");
+            inputWeightBrutto.setAttribute("value", `${response["productNettoInDishes"][`${pn}`].productWeightBrutto}`);
+
+            let inputWeightNetto = document.createElement("input");
+            inputWeightNetto.setAttribute("class", "form-control");
+            inputWeightNetto.setAttribute("readonly", "readonly");
+            inputWeightNetto.setAttribute("value", `${response["productNettoInDishes"][`${pn}`].productWeightNetto}`);
+
+            divForProducts.appendChild(inputProductName);
+            divForProcessings.appendChild(inputProcessingName);
+            divForWeightBrutto.appendChild(inputWeightBrutto);
+            divForWeightNetto.appendChild(inputWeightNetto);
+
+            productNettoInDishesItemContainer.appendChild(divForProducts);
+            productNettoInDishesItemContainer.appendChild(divForProcessings);
+            productNettoInDishesItemContainer.appendChild(divForWeightBrutto);
+            productNettoInDishesItemContainer.appendChild(divForWeightNetto);
+
+            dishContainsProd.appendChild(productNettoInDishesItemContainer);
+        }
+
+        for (let i = 0; i < usefulPropInputs.length; i++) {
+            usefulPropInputs[i].innerText = response[`${usefulPropInputs[i].getAttribute("name")}`];
+        }
+        if (!document.querySelector(`${modalId} .edit-value`))
+        {
+            let editBtn = document.createElement("button");
+            editBtn.textContent = "Изменить";
+            editBtn.setAttribute("class", "btn btn-primary edit-value");
+            editBtn.setAttribute("name", `${e.target.getAttribute("name")}`);
+            editBtn.setAttribute("data-bs-toggle", "modal");
+            editBtn.setAttribute("data-bs-target", `#add${e.target.getAttribute("name")}`);
+            editBtn.setAttribute("id", `${id}`);
+            editBtn.addEventListener("click", (e) => {
+                document.querySelector(`${modalId} .btn-close`).click();
+                editDishCart(e);
+            });
+            modelsBtnContainer.appendChild(editBtn);
+        }
+
+
+
+    }
+
+    function createItemForList(idValue, id, number, name, category) {
+
+        let listItem = document.createElement("div");
+        listItem.setAttribute("class", "listItem");
+        listItem.setAttribute("id", `${idValue + id}`);
+
+        let divNumber = document.createElement("div");
+        divNumber.innerText = number + 1;
+        let divName = document.createElement("div");
+        if (idValue == "dishCarts") {
+            let detailsRef = document.createElement("button");
+            detailsRef.setAttribute("type", "button");
+            detailsRef.setAttribute("class", "btn btn-link");
+            detailsRef.setAttribute("title", "Подробнее...");
+            detailsRef.setAttribute("id", `${id}`);
+            detailsRef.setAttribute("name", `${idValue}`);
+            detailsRef.setAttribute("data-bs-toggle", "modal");
+            detailsRef.setAttribute("data-bs-target", "#getDishCart");
+            detailsRef.addEventListener("click", (e) => getDishCart(e, id));
+            detailsRef.innerText = name;
+            divName.appendChild(detailsRef);
+        }
+        else {
+            divName.innerText = name;
+        }
+
+
+        let divNameContainer = document.createElement("div");
+        divNameContainer.setAttribute("class", "divNameContainer");
+
+        let divBtnContainer = document.createElement("div");
+        divBtnContainer.setAttribute("class", "divBtnContainer");
+
+        let deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "удалить";
+        deleteBtn.setAttribute("data-listName", `${category}`);
+        deleteBtn.setAttribute("class", "deleteFromListBtn" );
+        deleteBtn.addEventListener("click", (e) => deleteItem(e, `${idValue}`, `${id}`));
+
+
+        let editBtn = document.createElement("button");
+        editBtn.textContent = "изменить";
+        editBtn.setAttribute("class", "editFromListBtn edit-value");
+        editBtn.setAttribute("name", `${idValue}`);
+        editBtn.setAttribute("data-bs-toggle", "modal");
+        editBtn.setAttribute("data-bs-target", `#add${idValue}`);
+        editBtn.setAttribute("id", `${id}`);
+        editBtn.addEventListener("click", (e) => editItem(e));
+
+        divNameContainer.appendChild(divNumber);
+        divNameContainer.appendChild(divName);
+
+        divBtnContainer.appendChild(deleteBtn);
+        divBtnContainer.appendChild(editBtn);
+
+        listItem.appendChild(divNameContainer);
+        listItem.appendChild(divBtnContainer);
+
+        return listItem;
+    }
+
+    function createNameOfList(nameOfList) {
+        let itemName = document.createElement("div");
+        itemName.setAttribute("class", "itemName");
+        itemName.innerText = nameOfList;
+        return itemName;
+    }
+
+    async function fillList(data, idValue, category) {
+
+        let containerForList = document.querySelector(".listValues > .container-for-list");
+
+        let containerForNameAndItemList = document.createElement("div");
+        containerForNameAndItemList.setAttribute("class", "containerForNameAndItemList");
+
+        let itemName = createNameOfList(category);
+
+        let listContainer = document.createElement("div");
+        listContainer.setAttribute("class", "listContainer");
+
+        for (let i = 0; i < data.length; i++) {
+
+            let listItem = createItemForList(idValue, data[i].id, i, data[i].name, category);
+            listContainer.appendChild(listItem);
+        }
+
+        containerForNameAndItemList.appendChild(itemName);
+        containerForNameAndItemList.appendChild(listContainer);
+        containerForList.appendChild(containerForNameAndItemList);
+    }
+
+    function clearList() {
+        products = null;
+        processings = null;
+        meals = null;
+        dishCarts = null;
+        let inputsDates = document.querySelectorAll(`#MenuDates > input`);
+        inputsDates[0].value = "";
+        inputsDates[1].value = "";
+            let containerForList = document.querySelector(".container-for-list");
+            let containerForNameAndItemList = document.querySelector(".containerForNameAndItemList");
+            if (checkChildNodes(".container-for-list")) {
+                containerForList.removeChild(containerForNameAndItemList);
+            }
+    }
+
+    async function deleteItem(e, controller, id) {
+        let url = `/api/${controller}/${id}`;
+        let response = await fetch(url, {
+            method: 'DELETE'
+        });
+        if (response.ok) {
+            let elem = document.querySelector(`#${controller + id}`);
+            elem.classList.add("animate");
+            await setTimeout(() => {
+                elem.remove();
+                getList(e, `${controller}`, `${e.target.getAttribute("data-listName")}`);
+            }, 700);
+        }
+        else {
+            alert("Что-то пошло не так... Обратитесь к администратору!");
+        }
+    }
+
+    async function editItem(e) {
+        let targetName = e.target.getAttribute("name"); //products
+        if (targetName == "dishCarts") {
+            editDishCart(e);
+        } else {
+            let form = document.querySelector(`#add${targetName}form`); //<div>
+            let formId = form.getAttribute("id");
+            let dataElemName = targetName + "Property"; //productsProperty
+            let inputs = document.querySelectorAll(`#${formId} .${dataElemName}`);
+            let relatedData = dataRelated[`${targetName}`];
+            let submitBtn = document.querySelector(`#${formId} .modalBtnSubmit`);
+            submitBtn.classList.add("edit-submit-btn");
+            let id = e.target.getAttribute("id");
+            let url = `/api/${targetName}/${id}`;
+            let response = await fetch(
+                url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(r => r.json());
+
+            for (let i = 0; i < inputs.length; i++) {
+                if (inputs[i].tagName == "INPUT") {
+                    inputs[i].value = response[inputs[i].getAttribute("name")];
+                }
+            }
+            let arrayOfIds = [];
+            if (relatedData != "") {
+                let arr = getArrayFromString(relatedData);
+                for (let i = 0; i < arr.length; i++) {
+                    arrayOfIds[i] = response[`${arr[i].slice(0, arr[i].length - 1)}Id`];
+                }
+                getRelatedData(e, arrayOfIds);
+            }
+
+        }
+    }
+
+    function getArrayFromString(someString) {
+        let str = someString.replace(/ +/g, ' ').trim();
+        let arr = str.split(' ');
+        return arr;
+    }
+
+    async function getRelatedData(e, ids) {
+        let targetName = e.target.getAttribute("name");
+        if (targetName == "dishCarts") {
+           getProdProcessings(e);
+        }
+        else if (targetName == "menuItems") {
+            getMenuItems(e);
+        }
+        else if (targetName == "showMenuBtn") {
+            (e) => getMenu(e);
+        }
+        else {
+            if (e.target.classList.contains("add-new-value")) {
+                clearForm(targetName);
+            }
+            let relatedData = dataRelated[targetName];
+            if (relatedData != "") {
+                let targetModalWindow = e.target.getAttribute("data-bs-target");
+                let relatedDataContainers = document.querySelectorAll(`${targetModalWindow} .relatedDataContainer`);
+                let arr = getArrayFromString(relatedData);
+                for (let i = 0; i < arr.length; i++) {
+                    let url = `/api/${arr[i]}`;
+                    let responseRelated = await fetch(
+                        url, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(r => r.json());
+                    let select = await fillOptions(responseRelated, `${arr[i]}`, ids[i]);
+                    select.setAttribute('class', 'form-control');
+                    select.classList.add(`${e.target.getAttribute("name") + 'Property'}`);
+                    select.setAttribute("name", `${arr[i].slice(0, arr[i].length - 1)}Id`);
+                    if (relatedDataContainers[i].hasChildNodes()) {
+                        relatedDataContainers[i].removeChild(relatedDataContainers[i].firstChild);
+                    }
+                    relatedDataContainers[i].appendChild(select);
+                }
+            }
+        }
+    }
+
+    function createQueryResultMessage(response) {
+        let infoRow = document.createElement("div");
+        infoRow.setAttribute("class", "infoRow");
+        if (response.ok) {
+            infoRow.classList.add("infoRowSuccess");
+            infoRow.innerText = "Данные успешно отправлены на сервер!";
+        }
+        else {
+            infoRow.classList.add("infoRowFailed");
+            infoRow.innerText = "Данные не отправлены! Обратитесь к администратору!";
+        }
+        return infoRow;
+    }
+
+    function clearForm(controllerName) {
+        let form = document.querySelector(`#add${controllerName}form`);
+        let formId = form.getAttribute("id");
+        let dataElemName = controllerName + "Property";
+        let inputs = document.querySelectorAll(`#${formId} .${dataElemName}`);
+        for (let i = 0; i < inputs.length; i++) {
+            if (inputs[i].tagName == "INPUT" && inputs[i].getAttribute("name") !== "id") {
+                inputs[i].value = "";
+            }
+            else if (inputs[i].tagName == "INPUT" && inputs[i].getAttribute("name") === "id") {
+                inputs[i].value = 0;
+            }
+        }
+        (e) => getRelatedData(e, 0);
+    }
+
+    async function sendDataToServer(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        let submiBtn = e.target;
+        let dataProp = submiBtn.getAttribute("data-prop");
+        let form = document.querySelector(`#add${dataProp}form`);
+        let formId = form.getAttribute("id");
+        let dataElemName = dataProp + "Property";
+        let inputs = document.querySelectorAll(`#${formId} .${dataElemName}`);
+        let url = form.getAttribute("action");
+
+            let messageContainer = document.querySelector(`#${formId} > .message-container`);
+
+            let obj = {};
+
+            for (let i = 0; i < inputs.length; i++) {
+                obj[inputs[i].getAttribute("name")] = inputs[i].value;
+            }
+
+            let response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(obj)
+            });
+
+            let infoRow = createQueryResultMessage(response);
+            if (!checkChildNodes(`#${formId} > .message-container`)) {
+                messageContainer.appendChild(infoRow);
+                if (submiBtn.classList.contains("edit-submit-btn")) {
+                    submiBtn.setAttribute("disabled", "disabled");
+                    setTimeout(() => {
+                        submiBtn.classList.remove("edit-submit-btn");
+                        submiBtn.removeAttribute("disabled");
+                        messageContainer.removeChild(messageContainer.firstChild);
+                        document.querySelector(`#add${dataProp} .btn-close`).click();
+                        getList(e, `${dataProp}`, `${submiBtn.getAttribute("data-listName")}`);
+                    }, 1500);
+                } else {
+                    setTimeout(() => {
+                        messageContainer.removeChild(messageContainer.firstChild);
+                    }, 3000);
+                }
+        }
+        clearForm(dataProp);
+    }
+
+    function checkChildNodes(identifier) {
+        let currentNode = document.querySelector(`${identifier}`);
+        return currentNode.hasChildNodes();
+    }
+
+
+    //MENU
+
+    function createTable(e, productsAll, response, inputsDates) {
+        let tableDivContainer = document.createElement("div");
+        let nameOfTableMenu = document.createElement("div");
+        nameOfTableMenu.setAttribute("class", "nameOfTableMenu");
+        let h4 = document.createElement("h4");
+        h4.innerText = "РАСКЛАДКА ПРОДУКТОВ,"
+        let p1 = document.createElement("p");
+        p1.innerText = "вкладываемых в котел на одного человека в сутки в столовой";
+        let p2 = document.createElement("p");
+        p2.innerText = `c ${new Date(inputsDates[0].value).toLocaleDateString()} по ${new Date(inputsDates[1].value).toLocaleDateString()}`;
+        nameOfTableMenu.appendChild(h4);
+        nameOfTableMenu.appendChild(p1);
+        nameOfTableMenu.appendChild(p2);
+        tableDivContainer.appendChild(nameOfTableMenu);
+        let table = document.createElement("table");
+        table.setAttribute("class", "table table-bordered");
+        let thead = document.createElement("thead");
+        //thead
+        let tr = document.createElement("tr");
+        let dishName = document.createElement("th");
+        dishName.innerText = "Название блюда";
+        tr.appendChild(dishName);
+        for (let i = 0; i < productsAll.length; i++) {
+            let th = document.createElement("th");
+            th.innerText = productsAll[i].name;
+            tr.appendChild(th);
+        }
+        thead.appendChild(tr);
+        table.appendChild(thead);
+        for (let i = 0; i < response.length; i++) {
+            let mealNameIdCurrent = 0;
+            let tbody = document.createElement("tbody");
+            let tr = document.createElement("tr");
+            let td = document.createElement("td");
+            td.setAttribute("colspan", `${productsAll.length + 1}`);
+            td.setAttribute("style", "font-weight: 800; text-decoration: underline;");
+
+            let detailsRef = document.createElement("button");
+            detailsRef.setAttribute("type", "button");
+            detailsRef.setAttribute("class", "btn btn-link link-menuItem");
+            detailsRef.setAttribute("title", "Изменить меню на указанную дату");
+            detailsRef.setAttribute("id", `${response[i].menuItemId}`);
+            detailsRef.setAttribute("name", "menuItems");
+            detailsRef.setAttribute("data-bs-toggle", "modal");
+            detailsRef.setAttribute("data-bs-target", "#addmenuItems");
+            detailsRef.addEventListener("click", (e) => {
+                editMenuItems(e);
+                document.querySelector("#showMenu .btn-close").click();
+            });
+            let button = document.createElement("button");
+            button.innerText = "удалить";
+            button.setAttribute("class", "btn btn-danger");
+            button.setAttribute("style", "position: absolute; right: 30px;")
+            button.setAttribute("id", `${response[i].menuItemId}`);
+            button.addEventListener("click", (e) => deleteMenuItem(e));
+            detailsRef.innerText = new Date(response[i].menuItemDate).toLocaleDateString();
+            td.appendChild(detailsRef);
+            td.appendChild(button);
+            tr.appendChild(td);
+            tbody.appendChild(tr);
+            for (let j = 0; j < response[i].mealDishProd.length; j++) {
+                if (mealNameIdCurrent != response[i].mealDishProd[j].mealId) {
+                    mealNameIdCurrent = response[i].mealDishProd[j].mealId;
+                    let trRowMealName = document.createElement("tr");
+                    let td = document.createElement("td");
+                    td.setAttribute("colspan", `${productsAll.length + 1}`);
+                    td.innerText = response[i].mealDishProd[j].mealName;
+                    td.setAttribute("style", "font-weight: 600;");
+                    trRowMealName.appendChild(td);
+                    tbody.appendChild(trRowMealName);
+                }
+                for (let k = 0; k < response[i].mealDishProd[j].prods.length; k++) {
+                    let trRowDishName = document.createElement("tr");
+                    let td = document.createElement("td");
+                    td.innerText = response[i].mealDishProd[j].prods[k].dishName;
+                    trRowDishName.appendChild(td);
+                    for (let n = 0; n < productsAll.length; n++) {
+                        let td = document.createElement("td");
+                        for (let t in response[i].mealDishProd[j].prods[k].prodCount) {
+                            if (productsAll[n].id == t) {
+                                td.innerText = response[i].mealDishProd[j].prods[k].prodCount[t];
+                            }
+                        }
+                        trRowDishName.appendChild(td);
+                    }
+                    tbody.appendChild(trRowDishName);
+                }
+            }
+            let trTotal = document.createElement("tr");
+            trTotal.setAttribute("class", "totalCountPerDay");
+            let tdTotal = document.createElement("td");
+            tdTotal.innerText = "Итого продуктов на 1 человека в день:";
+            trTotal.appendChild(tdTotal);
+            for (let k = 0; k < productsAll.length; k++) {
+                let td = document.createElement("td");
+                for (let s in response[i].productsPerDayCount) {
+                    if (productsAll[k].id == s) {
+                        td.innerText = response[i].productsPerDayCount[s];
+                    }
+                }
+                trTotal.appendChild(td);
+            }
+            tbody.appendChild(trTotal);
+            table.appendChild(tbody);
+            mealNameIdCurrent = 0;
+        }
+
+        tableDivContainer.appendChild(table);
+
+        return tableDivContainer;
+    }
+
+    async function getMenu(e, date = null) {
+        e.preventDefault();
+        e.stopPropagation();
+        let showMenuContainer = document.querySelector("#showMenuform .showMenuFormContainer");
+        let showMenuFormContainerDivs = document.querySelectorAll("#showMenuform .showMenuFormContainer > div");
+        for (let i = 0; i < showMenuFormContainerDivs.length; i++) {
+            showMenuContainer.removeChild(showMenuFormContainerDivs[i]);
+        }
+        let url = "";
+        let inputsDates = document.querySelectorAll(`#MenuDates > input`);
+        if (date == null)
+            {
+                url = `/Home/getMenus?date1=${inputsDates[0].value}&date2=${inputsDates[1].value}`;
+            }
+            else {
+                url = `/Home/getMenus?date1=${date}&date2=${date}`;
+                inputsDates[0].value = date;
+                inputsDates[1].value = date;
+            }
+        let response = await fetch(
+            url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(r => r.json());
+        let productsAll = await fetch(
+            "/home/GetProducts", {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(r => r.json());
+        let tableDivContainer = createTable(e, productsAll, response, inputsDates);
+        showMenuContainer.appendChild(tableDivContainer);
+    }
+
+    async function deleteMenuItem(e) {
+        let id = e.target.getAttribute("id");
+        let url = `/api/menuItems/${id}`;
+        if (id != 0) {
+            let response = await fetch(url, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                e.target.parentNode.parentNode.parentNode.remove();
+            }
+            else {
+                alert("Что-то пошло не так... Обратитесь к администратору!");
+            }
+        }
+    }
+
+
+    @*------ EVENT Listeners ------*@
+
+    //1
+    let buttonsList = document.querySelectorAll(".list-button");
+    for (let i = 0; i < buttonsList.length; i++) {
+        buttonsList[i].addEventListener("click", getList);
+    }
+
+    //2
+    let clearBtn = document.querySelector("#clearBtn");
+    clearBtn.addEventListener("click", clearList);
+
+    //3
+    let btnsBackToList = document.querySelectorAll(".btnBackToList");
+    for (let i = 0; i < btnsBackToList.length; i++) {
+        btnsBackToList[i].addEventListener("click", (e) => {
+            let controller = e.target.getAttribute("data-prop");
+            let datalistName = e.target.getAttribute("data-listName");
+            clearForm(controller);
+            getList(e, `${controller}`, `${datalistName}`);
+        });
+    }
+
+    //4
+    let dataTargets = document.querySelectorAll("button[data-bs-target]");
+    for (let i = 0; i < dataTargets.length; i++) {
+        dataTargets[i].addEventListener("click", (e) => getRelatedData(e, 0));
+    }
+
+    //5
+    let modalBtnSubmits = document.querySelectorAll(".modalBtnSubmit");
+    for (let i = 0; i < modalBtnSubmits.length; i++) {
+        modalBtnSubmits[i].addEventListener("click", (e) => sendDataToServer(e));
+    }
+    //6
+    let showMenuBtn = document.querySelector("#showMenuBtn");
+    showMenuBtn.addEventListener("click", (e) => getMenu(e));
+
+</script>

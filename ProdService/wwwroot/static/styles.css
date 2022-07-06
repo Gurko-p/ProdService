@@ -1,0 +1,357 @@
+﻿html {
+    height: 100%;
+    background-image: url(/static/img/1.jpg);
+    background-position: center center;
+    background-color: rgb(14,14,14);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100%;
+    font-size: 16px;
+}
+
+body {
+    background-color: transparent;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+
+.affirm {
+    width: 400px;
+    margin: 2em 0 20px 7em;
+    color: whitesmoke;
+    font-size: 1.1rem;
+}
+
+.tableMenuName {
+    margin: 0 auto;
+    text-align: center;
+    padding-bottom: 20px;
+    color: whitesmoke;
+    font-size: 1.1rem;
+}
+
+.goToСonstructor {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/*.table {
+    background-color: transparent;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: whitesmoke;
+    border-color: honeydew;
+    opacity: 0.9;
+    font-size: 1.1rem;
+}*/
+
+table > tbody tr:hover {
+    background-color: chocolate;
+}
+
+table th, td{
+    text-align: center;
+}
+
+.showMenuFormContainer {
+    margin: 20px 15px;
+}
+
+
+.totalPerDay {
+    border: 3px solid white;
+    background-color: darkseagreen;
+    font-weight: 800;
+    color: black;
+}
+
+.modal-dialog {
+    max-width: 750px;
+    margin: 1.75rem auto;
+}
+
+.modal-body {
+    padding: 0;
+}
+
+#showMenu .modal-dialog{
+    max-width: 90%;
+    scroll-behavior: auto;
+}
+
+.button-container {
+    margin: 50px;
+}
+
+.dateContainer {
+    margin: 20px;
+    width: 27%;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+    .dateContainer > div:first-child {
+        color: whitesmoke;
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        font-size: 18px;
+    }
+
+    .dateContainer #MenuDates {
+        margin: 10px 20px;
+        width: 80%;
+    }
+        .dateContainer #MenuDates > input {
+            margin: 10px 0;
+            width: 100%;
+        }
+
+.button-container > .button-box {
+    margin: 10px 20px;
+}
+
+.button-box > button {
+    width: 250px;
+    border: 1px solid whitesmoke;
+}
+
+.listValues {
+    position: absolute;
+    top: 3%;
+    width: 33%;
+    height: 91%;
+    left: 40%;
+    right: 20%;
+    border: 1px solid gray;
+    margin: 0 50px;
+    transform: rotate(1deg);
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    z-index: 1;
+    background-image: url(/static/img/4.jpg);
+    opacity: 0.9;
+    background-repeat: repeat-y;
+    max-width: 650px;
+    min-width: 650px;
+    min-height: 870px;
+    max-height: 870px;
+}
+
+.container-for-list {
+    height: 100%;
+    padding: 7% 10%;
+    overflow-x: auto;
+    overflow-y: auto;
+    color: white;
+}
+
+.itemName {
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: 600;
+    padding: 0 20px 20px 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-style: italic;
+    padding-bottom: 4rem;
+}
+
+.listItem {
+    height: 60px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: .5em;
+    border: 2px solid gray;
+    border-radius: .5em;
+}
+
+    .listItem .divBtnContainer {
+        margin: 0 auto;
+    }
+
+.divBtnContainer {
+    display: flex;
+    width: 45%;
+    height: 100%;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.deleteFromListBtn, .editFromListBtn {
+    width: 50%;
+    height: 50%;
+    margin: 0 5%;
+    border-radius: .5em;
+    opacity: .9;
+    background-color: transparent;
+    border: 2px solid whitesmoke;
+    color: whitesmoke;
+    text-align: center;
+}
+
+.divBtnContainer > button:first-child:hover {
+    background-color: firebrick;
+}
+
+.divBtnContainer button:last-child:hover {
+    background-color: darkorange;
+}
+
+.divNameContainer {
+    display: flex;
+    width: 60%;
+    height: 100%;
+    align-items: center;
+}
+
+    .divNameContainer > div:first-child {
+        padding: 0 5%;
+    }
+
+.animate {
+    animation-duration: 1s;
+    animation-name: slidein;
+    animation-iteration-count: initial;
+    animation-direction: alternate;
+}
+
+@keyframes slidein {
+    0% {
+        margin-left: 0%;
+        opacity: 1;
+    }
+
+    33% {
+        margin-left: -10%;
+        opacity: 0.7;
+    }
+
+    100% {
+        margin-left: 100%;
+        opacity: 0.1;
+    }
+}
+
+.my-form-container {
+    padding: 10px 5%;
+}
+
+.my-form-group {
+    padding-bottom: 10px;
+}
+
+.infoRow {
+    width: 100%;
+    height: 50px;
+    background-color: palegreen;
+    color: gray;
+    font-size: 1.1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.infoRowSuccess {
+    background-color: palegreen;
+    color: rgb(31 29 29);
+}
+
+.infoRowFailed {
+    background-color: rgb(250 118 114);
+    color: rgb(31 29 29);
+}
+
+.modal-btns-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+    margin: 15px;
+}
+
+    .modal-btns-container > button {
+        margin: 0 50px;
+    }
+
+
+.dishAddContainer, .menuItemAddContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+    width: 100%;
+    margin-bottom: 15px;
+}
+    .dishAddContainer > #dishName, .menuItemAddContainer > #menuItemDate {
+        width: 75%;
+    }
+
+#dishContainsProd > div, #usefulPropContainer > div, #tableDiahCartName, #menuItemContainsDishCart  > div{
+    width: 100%;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+}
+#dishContainsProd input, #usefulPropContainer input {
+    text-align: center;
+}
+
+    #dishContainsProd .divForProducts {
+        width: 30%;
+    }
+
+#menuItemContainsDishCart .divForMeals {
+    width: 35%;
+}
+
+#menuItemContainsDishCart .divFordishCarts {
+    width: 50%;
+}
+
+.nameOfPropertyGroup {
+    font-weight: 600;
+    padding: 10px;
+}
+
+#dishContainsProd .divForProcessings {
+    width: 37%;
+}
+
+#dishContainsProd .divForInputWeigth {
+    width: 16%;
+}
+
+#dishContainsProd button {
+    width: 14%;
+}
+
+form-control {
+    display: inline-block;
+}
+
+a, .btn-link {
+    color: white;
+}
+
+.totalCountPerDay{
+    background-color: darkgray;
+}
+
+.nameOfTableMenu{
+    text-align: center;
+    padding-bottom: 15px;
+}
+.nameOfTableMenu p{
+   margin: 0;
+   font-size: 1.1rem;
+}
+
+.link-menuItem{
+    color: black;
+}

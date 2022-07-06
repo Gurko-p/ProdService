@@ -1,0 +1,49 @@
+﻿@model IEnumerable<ProductDishCartJunction>
+@using System.Collections.Generic
+@{
+    Layout = "_Layout";
+    Dictionary<string, double> dict = null;
+}
+
+<input type="text" name="dishName" value="@Model.FirstOrDefault().DishCart.Name" />
+<br>
+<br>
+
+<table class="table-bordered">
+    @foreach (var p in Model)
+    {
+        <tr calss="text-center">
+            <td>
+                @p.Product.Name
+            </td>
+            <td>
+                @p.Processing.Name
+            </td>
+            <td>
+                @p.WeightBrutto
+            </td>
+            <td>
+                @ProductDishCartJunction.getNetto(p)
+            </td>
+        </tr>
+        dict = p.DishCart.getUsefulPropOfTheDish(p.DishCartId);
+    }
+</table>
+<table class="table-bordered table-sm">
+    <tr calss="text-center">
+        <td>Белки, г: </td>
+        <td>Жиры, г: </td>
+        <td>Углеводы, г: </td>
+        <td>Энергетическая ценность, ккал </td>
+    </tr>
+    <tr calss="text-center">
+        <td>@dict["Squirrels"]</td>
+        <td>@dict["Fats"]</td>
+        <td>@dict["Сarbohydrates"]</td>
+        <td>@dict["KCal"]</td>
+    </tr>
+</table>
+
+
+
+

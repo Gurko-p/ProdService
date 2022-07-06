@@ -1,0 +1,58 @@
+﻿<div class="modal fade" id="addproducts" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Добавление / Редактирование продукта</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="addproductsform" action="/api/products">
+                    <div class="message-container"></div>
+                    <div class="my-form-container">
+                        <input class="productsProperty" type="hidden" name="id" id="productId" value="0" />
+                        <div class="my-form-group">
+                            <div class="nameOfProperty">Название</div>
+                            <input class="form-control productsProperty" type="text" name="name" id="productName" />
+                        </div>
+                        <div class="my-form-group">
+                            <div class="nameOfProperty">Потери при очистке, %</div>
+                            <input class="form-control productsProperty" type="number" min="0.0" step="0.10" name="peelRate" id="peelRate" />
+                        </div>
+                        <div class="my-form-group">
+                            <div class="nameOfProperty">Потери при тепловой обработке, %</div>
+                            <input class="form-control productsProperty" type="number" min="0.0" step="0.10" name="heatTreatmentRate" id="heatTreatmentRate" />
+                        </div>
+                        <div class="my-form-group">
+                            <div class="nameOfProperty">Белки, на 100 г (нетто)</div>
+                            <input class="form-control productsProperty" type="number" min="0.0" step="0.50" name="squirrels" id="squirrels" />
+                        </div>
+                        <div class="my-form-group">
+                            <div class="nameOfProperty">Жиры, на 100 г (нетто)</div>
+                            <input class="form-control productsProperty" type="number" min="0.0" step="0.50" name="fats" id="fats" />
+                        </div>
+                        <div class="my-form-group">
+                            <div class="nameOfProperty">Углеводы, на 100 г (нетто)</div>
+                            <input class="form-control productsProperty" type="number" min="0.0" step="0.50" name="сarbohydrates" id="carbohydrates" />
+                        </div>
+                        <div class="my-form-group">
+                            <div class="nameOfProperty">Норма в сутки, г (нетто)</div>
+                            <input class="form-control productsProperty" type="number" min="0.0" step="0.50" name="normPerDay" id="normPerDay" />
+                        </div>
+                        <div class="my-form-group">
+                            <div class="nameOfProperty">Энергетическая ценность (кКал), 100 гр (Брутто)</div>
+                            <input class="form-control productsProperty" type="number" min="0.0" step="0.50" name="kCal" id="kCal" />
+                        </div>
+                        <div class="my-form-group">
+                            <div class="nameOfProperty">Группа продуктов</div>
+                            <div class="relatedDataContainer"></div>
+                        </div>
+                        <div class="modal-btns-container">
+                            <button type="button" class="btn btn-secondary modalBtnSubmit" data-prop="products" data-listName="Продукты">Отправить</button>
+                            <button type="button" class="btn btn-primary btnBackToList" data-prop="products" data-listName="Продукты" data-bs-dismiss="modal">К списку продуктов</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

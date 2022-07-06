@@ -1,0 +1,26 @@
+﻿<div class="modal fade" id="addproductGroups" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Добавление / Редактирование групп продуктов</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="addproductGroupsform" action="/api/productGroups">
+                    <div class="message-container"></div>
+                    <div class="my-form-container">
+                        <input class="productGroupsProperty" type="hidden" name="id" id="productGroupId" value="0" />
+                        <div class="my-form-group">
+                            <div class="nameOfProperty">Название группы продуктов</div>
+                            <input class="form-control productGroupsProperty" type="text" name="name" id="productGroupName" />
+                        </div>
+                        <div class="modal-btns-container">
+                            <button type="button" class="btn btn-secondary modalBtnSubmit" data-prop="productGroups" data-listName="Группы продуктов">Отправить</button>
+                            <button type="button" class="btn btn-primary btnBackToList" data-prop="productGroups" data-listName="Группы продуктов" data-bs-dismiss="modal">К списку групп продуктов</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

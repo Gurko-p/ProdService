@@ -1,0 +1,63 @@
+﻿<div class="modal fade" id="getDishCart" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Подробная информация о блюде:</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="getDishCartform">
+                    <div class="my-form-container">
+                        <div class="nameOfProperty">Название блюда:</div>
+                        <div class="dishAddContainer">
+                            <input type="hidden" name="DishCartId" id="getDishCartId" />
+                            <input type="text" class="form-control" name="DishCartName" id="getDishCartName" readonly />
+                        </div>
+                        <div class="nameOfPropertyGroup">Состав блюда:</div>
+                        <div id="tableDiahCartName">
+                            <div class="form-control">
+                                Название продукта
+                            </div>
+                            <div class="form-control">
+                                Способ обработки
+                            </div>
+                            <div class="form-control">
+                                Масса брутто, г
+                            </div>
+                            <div class="form-control">
+                                Масса нетто, г
+                            </div>
+                        </div>
+                        <div id="dishContainsProd"></div>
+                        <div class="nameOfPropertyGroup">Количество нутриентов и калорийность:</div>
+                        <div id="usefulPropContainer">
+                            <div>
+                                <div class="form-control">
+                                    Белки, г (нетто)
+                                </div>
+                                <div class="form-control">
+                                    Жиры, г (нетто)
+                                </div>
+                                <div class="form-control">
+                                    Углеводы, г (нетто)
+                                </div>
+                                <div class="form-control">
+                                    Энергетическая ценность (кКал)
+                                </div>
+                            </div>
+                            <div>
+                                <div class="usefulProp form-control" name="squirrels"></div>
+                                <div class="usefulProp form-control" name="fats"></div>
+                                <div class="usefulProp form-control" name="сarbohydrates"></div>
+                                <div class="usefulProp form-control" name="kCal"></div>
+                            </div>
+                        </div>
+                        <div class="modal-btns-container">
+                            <button type="button" class="btn btn-primary btnBackToList" data-prop="dishCarts" data-listName="Список блюд" data-bs-dismiss="modal">К списку блюд</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

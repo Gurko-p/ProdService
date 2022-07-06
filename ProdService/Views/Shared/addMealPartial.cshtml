@@ -1,0 +1,26 @@
+﻿<div class="modal fade" id="addmeals" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Добавление / Редактирование приема пищи</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="addmealsform" action="/api/meals">
+                    <div class="message-container"></div>
+                    <div class="my-form-container">
+                        <input class="mealsProperty" type="hidden" name="id" id="mealId" value="0" />
+                        <div class="my-form-group">
+                            <div class="nameOfProperty">Название приема пищи</div>
+                            <input class="form-control mealsProperty" type="text" name="name" id="mealName" minlength="5" />
+                        </div>
+                        <div class="modal-btns-container">
+                            <button type="button" class="btn btn-secondary modalBtnSubmit" data-prop="meals" data-listName="Приемы пищи">Отправить</button>
+                            <button type="button" class="btn btn-primary btnBackToList" data-prop="meals" data-listName="Приемы пищи" data-bs-dismiss="modal">К списку приемов пищи</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

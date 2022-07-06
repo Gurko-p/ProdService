@@ -1,0 +1,129 @@
+﻿@model IEnumerable<MenuItem>
+
+@{
+    Layout = "_Layout";
+    int col = ViewBag.Products.Count + 3;
+    long meal = 0;
+    double kCalPeDay = 0;
+}
+<div>
+    <div class="affirm">
+        <div>
+            УТВЕРЖДАЮ
+        </div>
+        <div>
+            Начальник учреждения образования<br>
+            "Академия Министерства внутренних дел <br>
+            Республики Беларусь"
+        </div>
+        <div>
+            генерал-майор милиции
+        </div>
+        <div>
+            <span style="padding-left: 200px;">А.П.Васильев</span>
+        </div>
+    </div>
+    <div class="tableMenuName">
+        <div>
+            РАСКЛАДКА ПРОДУКТОВ,
+        </div>
+        <div>
+            вкладываемых в котел на одного человека в сутки в столовой Академии МВД Республики Беларусь
+        </div>
+        <div>
+            на период с @(Convert.ToDateTime(ViewData["date1"]).ToShortDateString())
+            по @(Convert.ToDateTime(ViewData["date2"]).ToShortDateString())
+        </div>
+    </div>
+</div>
+
+<div class="goToСonstructor">
+    <a asp-action="FillDbNewItems">Перейти к панели конструктора</a>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr class="text-center">
+            <th>Вид приема пищи</th>
+            <th>Название блюда</th>
+            @foreach (var pr in ViewBag.Products)
+            {
+                <th>@pr.Name</th>
+            }
+            <th>Калорийность блюда</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var m in Model)
+        {
+            <tr class="text-center">
+                <td style="vertical-align: middle;" data-date="@m.Id" colspan="@col">
+                    @m.Date.ToShortDateString()
+                    @{
+                        var culture = new System.Globalization.CultureInfo("ru-RU");
+                        var day = culture.DateTimeFormat.GetDayName(m.Date.DayOfWeek);
+                    }
+                    (@day.ToUpper())
+                </td>
+            </tr>
+            @foreach (var mn in m.DishCartMenuItemJunctions.OrderBy(p => p.MealId))
+            {
+                <tr class="text-center">
+                    <td style="vertical-align: middle;">
+                        @mn.Meal.Name
+                    </td>
+                    @*@if (mn.MealId != meal)
+                        {
+                            meal = mn.MealId;
+                            <td rowspan="@mn.DishCart.DishCartMenuItemJunctions.Where(a => a.MenuItemId == m.Id && a.MealId == mn.MealId).Count()" style="vertical-align: middle;">
+                                @mn.Meal.Name
+                            </td>
+                        }*@
+                    <td><a asp-action="GetDish" asp-route-id="@mn.DishCartId">@mn.DishCart.Name</a></td>
+                    @foreach (var pr in ViewBag.Products)
+                    {
+                        <td>
+                            @foreach (var d in mn.DishCart.GetBruttoProductInDish(mn.DishCartId))
+                            {
+                                @if (d.Key == pr.Id)
+                                {
+                                    @d.Value
+                                }
+                            }
+                        </td>
+                    }
+                    @{kCalPeDay += mn.DishCart.getUsefulPropOfTheDish(mn.DishCartId)["KCal"];}
+                    <td>@(Math.Ceiling(mn.DishCart.getUsefulPropOfTheDish(mn.DishCartId)["KCal"]))</td>
+                </tr>
+            }
+
+            Dictionary
+            <long, double>
+                dict = new Dictionary<long, double>
+                    ();
+            @foreach (var k in m.DishCartMenuItemJunctions)
+            {
+                @foreach (var a in k.DishCart.GetBruttoCountPerProductOnADay(m.Id))
+                {
+                    dict[a.Key] = a.Value;
+                }
+            }
+            <tr class="text-center totalPerDay">
+                <td colspan="2" style="font-weight: 600;">Итого за день: </td>
+                @foreach (var p in ViewBag.Products)
+                {
+
+                    <td>
+                        @if (dict.ContainsKey(p.Id))
+                        {
+                            <span style="font-weight: 600;">@dict[p.Id]</span>;
+                        }
+                    </td>
+                }
+                <td>@(Math.Ceiling(kCalPeDay))</td>
+            </tr>
+            <tr><td></td></tr>
+            kCalPeDay = 0;
+        }
+
+</table>

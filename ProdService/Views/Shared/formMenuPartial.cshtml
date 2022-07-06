@@ -1,0 +1,27 @@
+﻿<div class="modal fade" id="addmenuItems" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Составление / Редактирование меню</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="addmenuItemsform" action="/api/dishCarts">
+                    <div class="message-container"></div>
+                    <div class="my-form-container">
+                        <div class="menuItemAddContainer">
+                            <input type="hidden" name="id" value="0" id="menuItemId" />
+                            <input type="date" class="form-control" name="date" id="menuItemDate" placeholder="Выберите дату" />
+                            <button type="button" id="addDishToMenu" class="btn btn-primary">Добавить блюдо</button>
+                        </div>
+                        <div id="menuItemContainsDishCart"></div>
+                        <div class="modal-btns-container">
+                            <button type="button" class="btn btn-secondary" id="submitBtnMenuItem" data-prop="menuItems" data-listName="Меню">Отправить</button>
+                            <button type="button" class="btn btn-primary showMenu" data-prop="menuItems" data-bs-dismiss="modal">Показать меню на указанную дату</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

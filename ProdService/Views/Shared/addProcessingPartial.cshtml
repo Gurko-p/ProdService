@@ -1,0 +1,38 @@
+﻿<div class="modal fade" id="addprocessings" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Добавление / Редактирование способов обработки</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="addprocessingsform" action="/api/processings">
+                    <div class="message-container"></div>
+                    <div class="my-form-container">
+                        <input class="processingsProperty" type="hidden" name="id" id="productId" value="0" />
+                        <div class="my-form-group">
+                            <div class="nameOfProperty">Название</div>
+                            <input class="form-control processingsProperty" type="text" name="name" id="processingName" />
+                        </div>
+                        <div class="my-form-group">
+                            <div class="nameOfProperty">Потери при тепловой обработке (белки), %</div>
+                            <input class="form-control processingsProperty" type="number" min="0.0" step="0.10" name="reduceSquirrels" id="reduceSquirrels" />
+                        </div>
+                        <div class="my-form-group">
+                            <div class="nameOfProperty">Потери при тепловой обработке (жиры), %</div>
+                            <input class="form-control processingsProperty" type="number" min="0.0" step="0.10" name="reduceFats" id="reduceFats" />
+                        </div>
+                        <div class="my-form-group">
+                            <div class="nameOfProperty">Потери при тепловой обработке (углеводы), %</div>
+                            <input class="form-control processingsProperty" type="number" min="0.0" step="0.10" name="reduceСarbohydrates" id="reduceСarbohydrates" />
+                        </div>
+                        <div class="modal-btns-container">
+                            <button type="button" class="btn btn-secondary modalBtnSubmit" data-prop="processings" data-listName="Способы обработки">Отправить</button>
+                            <button type="button" class="btn btn-primary btnBackToList" data-prop="processings" data-listName="Способы обработки" data-bs-dismiss="modal">К списку способов обработки продуктов</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
